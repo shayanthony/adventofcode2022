@@ -44,26 +44,15 @@ export class AppComponent {
   doTwo() {
     let arrays = strategyArray.trim().split("\n");
     let totalScore = 0;
+
     arrays.forEach(game => {
       let combinedScore = 0;
       let valueOne = game.charAt(0);
       let valueTwo = game.charAt(2)
-      
-      switch (valueTwo)
-      {
-        case "Y": 
-        combinedScore += 2
-        break;
-        case "X":
-        combinedScore += 1
-        break;
-        case "Z":
-        combinedScore += 3
-        break; 
-      }
 
-      combinedScore += this.calculateWinner(valueOne, valueTwo)
-      totalScore += combinedScore;
+      combinedScore = this.calculateWinner(valueOne, valueTwo)
+      console.log(combinedScore)
+      totalScore = totalScore + combinedScore;
       combinedScore = 0;
     })
 
@@ -78,6 +67,14 @@ export class AppComponent {
 
     if (valueOne === ElfHand.ROCK)
     {
+      if (valueTwo === WinLoseDraw.WIN) {
+        valueTwo = YourHand.PAPER
+      } else if (valueTwo === WinLoseDraw.DRAW) {
+        valueTwo = YourHand.ROCK
+      } else {
+        valueTwo = YourHand.SCISSORS
+      }
+
       if (valueTwo === YourHand.ROCK)
       {
         score = 3
@@ -88,6 +85,15 @@ export class AppComponent {
     }
 
     if (valueOne === ElfHand.PAPER) {
+      if (valueTwo === WinLoseDraw.WIN) {
+        valueTwo = YourHand.SCISSORS
+      } else if (valueTwo === WinLoseDraw.DRAW) {
+        valueTwo = YourHand.PAPER
+      } else {
+        valueTwo = YourHand.ROCK
+      }
+
+
       if (valueTwo === YourHand.PAPER) {
         score = 3;
       } else if (valueTwo === YourHand.SCISSORS) {
@@ -96,6 +102,14 @@ export class AppComponent {
     }
 
     if (valueOne === ElfHand.SCISSORS) {
+      if (valueTwo === WinLoseDraw.WIN) {
+        valueTwo = YourHand.ROCK
+      } else if (valueTwo === WinLoseDraw.DRAW) {
+        valueTwo = YourHand.SCISSORS
+      } else {
+        valueTwo = YourHand.PAPER
+      }
+
       if (valueTwo === YourHand.ROCK) {
         score = 6
       } else if (valueTwo === YourHand.SCISSORS) {
@@ -103,7 +117,19 @@ export class AppComponent {
       }
     }
 
-    console.log(score)
+    switch (valueTwo)
+    {
+      case YourHand.PAPER: 
+      score += 2
+      break;
+      case YourHand.ROCK:
+      score += 1
+      break;
+      case YourHand.SCISSORS:
+      score += 3
+      break; 
+    }
+
     return score
   }
 }
@@ -118,5 +144,11 @@ enum YourHand {
   ROCK = "X",
   PAPER = "Y",
   SCISSORS = "Z"
+}
+
+enum WinLoseDraw {
+  WIN = "Z",
+  DRAW = "Y",
+  LOSE = "X"
 }
 
