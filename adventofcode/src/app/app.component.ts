@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { inputArray } from 'src/assets/data';
 import { strategyArray } from 'src/assets/strategy-data';
+import { rucksacks } from 'src/assets/rucksacks'
 import { Elf } from 'src/model/elf';
 
 @Component({
@@ -132,6 +133,28 @@ export class AppComponent {
 
     return score
   }
+
+  doThree() {
+    let allRucksacks = rucksacks.trim().split("\n");
+    let totalPriorityScore = 0;
+
+    allRucksacks.forEach(rucksack => {
+      let array = [...rucksack];
+
+      let arrayHalf = array.splice(0, Math.ceil(array.length / 2));
+
+      const sameCharacters = array.filter(element => arrayHalf.includes(element));
+      let priority = parseInt(sameCharacters[0], 36) - 9;
+
+      if (sameCharacters[0] === sameCharacters[0].toUpperCase()) {
+        priority += 26
+      }
+
+      totalPriorityScore += priority
+    })
+
+    console.log(totalPriorityScore)
+  }
 }
 
 enum ElfHand {
@@ -151,4 +174,6 @@ enum WinLoseDraw {
   DRAW = "Y",
   LOSE = "X"
 }
+
+
 
