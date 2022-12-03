@@ -138,12 +138,12 @@ export class AppComponent {
     let allRucksacks = rucksacks.trim().split("\n");
     let totalPriorityScore = 0;
 
-    allRucksacks.forEach(rucksack => {
-      let array = [...rucksack];
-
-      let arrayHalf = array.splice(0, Math.ceil(array.length / 2));
-
-      const sameCharacters = array.filter(element => arrayHalf.includes(element));
+    const chunkSize = 3;
+    for (let i = 0; i < allRucksacks.length; i += chunkSize) {
+      const chunk = allRucksacks.slice(i, i + chunkSize);
+      
+      let sameCharacters = (this.findCommonChars(chunk))
+    
       let priority = parseInt(sameCharacters[0], 36) - 9;
 
       if (sameCharacters[0] === sameCharacters[0].toUpperCase()) {
@@ -151,9 +151,39 @@ export class AppComponent {
       }
 
       totalPriorityScore += priority
-    })
+    }
 
     console.log(totalPriorityScore)
+  }
+
+  // A wins a win, credit https://codereview.stackexchange.com/questions/220142/find-common-characters-leetcode
+  findCommonChars(words: any[]) {
+    let chars: Map<any, any>;
+    const result = [];
+    words = [...words.sort((a,b)=>b.length - a.length)];
+    
+    const countChars = (word: any, res = new Map()) => {
+        for (const char of word) {
+            res.has(char) && (!chars || chars.has(char)) ? 
+                res.get(char)[0]++ : res.set(char, [1]);
+        }
+        return res;
+    }
+    
+    chars = countChars(words.pop());
+    const charCounts = words.map(word => countChars(word));
+
+    for (let [char, count] of chars.entries()) {
+        for (const word of charCounts) {
+            if (word.has(char)) { count = Math.min(count, word.get(char)[0]) }
+            else {
+                count = 0;
+                break;
+            }
+        }
+        while (count--) { result.push(char) }
+    }    
+    return result;
   }
 }
 
