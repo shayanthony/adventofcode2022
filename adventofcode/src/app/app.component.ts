@@ -190,6 +190,7 @@ export class AppComponent {
   doFour() {
     let allPairings = pairing.trim().split("\n");
     let totalIncludes = 0;
+    let totalOverlaps = 0;
 
     allPairings.forEach(pairing => {
       let separated = pairing.split(',')
@@ -218,9 +219,16 @@ export class AppComponent {
           totalIncludes++
         }
       }
+
+      let sameValues = listOne.filter(number => listTwo.includes(number));
+
+      if (sameValues.length > 0) {
+        totalOverlaps++
+      }
     })
 
     console.log(totalIncludes)
+    console.log(totalOverlaps)
   }
 }
 
