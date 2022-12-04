@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { inputArray } from 'src/assets/data';
 import { strategyArray } from 'src/assets/strategy-data';
 import { rucksacks } from 'src/assets/rucksacks'
+import { pairing } from 'src/assets/pairings';
 import { Elf } from 'src/model/elf';
 
 @Component({
@@ -184,6 +185,42 @@ export class AppComponent {
         while (count--) { result.push(char) }
     }    
     return result;
+  }
+
+  doFour() {
+    let allPairings = pairing.trim().split("\n");
+    let totalIncludes = 0;
+
+    allPairings.forEach(pairing => {
+      let separated = pairing.split(',')
+
+      let firstPair = separated[0].split('-')
+      let secondPair = separated[1].split('-')
+
+      var listOne: number[] = [];
+      var listTwo: number[] = [];
+      for (var i = Number(firstPair[0]); i <= Number(firstPair[1]); i++) {
+        listOne.push(i);
+      }
+
+      for (var i = Number(secondPair[0]); i <= Number(secondPair[1]); i++) {
+        listTwo.push(i);
+      }
+
+      const containsAllTestOne = (listOne: string | any[], listTwo: any[]) => listTwo.every((item: any) => listOne.includes(item))
+      const containsAllTestTwo = (listTwo: string | any[], listOne: any[]) => listOne.every((item: any) => listTwo.includes(item))
+
+
+      if (containsAllTestOne(listOne, listTwo)) {
+        totalIncludes++
+      } else {
+        if (containsAllTestTwo(listTwo, listOne)) {
+          totalIncludes++
+        }
+      }
+    })
+
+    console.log(totalIncludes)
   }
 }
 
